@@ -21,6 +21,7 @@ main() {
 
     cp target/$TARGET/release/libdicenotation.rlib $stage/
     cp target/$TARGET/release/libdicenotation.d $stage/
+    cp target/$TARGET/release/dicenotation $stage/
 
     cd $stage
     tar czf $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.tar.gz *
