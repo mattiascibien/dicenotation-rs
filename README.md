@@ -1,0 +1,3 @@
+# dicenotation-rs [![Build status](https://ci.appveyor.com/api/projects/status/98cx0qvm7d0rvkqj?svg=true)](https://ci.appveyor.com/project/mattiascibien/dicenotation-rs) [![Build Status](https://travis-ci.org/mattiascibien/dicenotation-rs.svg?branch=master)](https://travis-ci.org/mattiascibien/dicenotation-rs)
+
+`dicenotation-rs` is a [Rust]() library aimed at parsing and rolling dices for Role-Playing games using [Standard Dice Notation](https://en.wikipedia.org/wiki/Dice_notation#Standard_notation) that bears inspiration from the  [dicenotation](https://github.com/mattiascibien/dicenotation) library. 

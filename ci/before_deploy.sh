@@ -17,7 +17,7 @@ main() {
 
     test -f Cargo.lock || cargo generate-lockfile
 
-    cross rustc --lib dicenotation --target $TARGET --release
+    cross rustc --bin dicenotation --target $TARGET --release -- -C lto
 
     cp target/$TARGET/release/libdicenotation.rlib $stage/
     cp target/$TARGET/release/libdicenotation.d $stage/
