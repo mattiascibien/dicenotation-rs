@@ -15,14 +15,15 @@ fn main() {
                 .version("1.0")
                 .author("Mattias Cibien <mattias@mattiascibien.net>")
                 .about("Rolls dice using Standard Dice Notation")
-                .arg(Arg::with_name("dicestring")
+                .arg(Arg::with_name("notation")
                     .required(true)
                     .index(1)
                     .takes_value(true))
                 .get_matches();
 
-     let dicestring = matches.value_of("dicestring").unwrap();
+     let notation = matches.value_of("notation").unwrap();
 
-     println!("Rolling: {}", dicestring);
+     println!("Rolling: {}", notation);
      // TODO: roll the dice using the library
+     println!("\t-> {}", dicenotation::roll_dice(notation) )
 }

@@ -28,3 +28,10 @@ impl PartialEq for DiceData {
         && self.modifier_val == other.modifier_val
     }
 }
+
+pub fn roll_dice(notation : &str) -> u32 {
+    let dice_data = parsing::parse(notation);
+    let result = rolling::roll(dice_data);
+
+    result
+}

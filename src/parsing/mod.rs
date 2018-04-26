@@ -1,11 +1,12 @@
 use super::regex::Regex;
 use super::DiceData;
 
-lazy_static! {
-    static ref RE: Regex = Regex::new(r"([0-9]+)d([0-9]+)([+-]){0,1}([0-9]+){0,1}").unwrap();
-}
-
 pub fn parse(notation : &str) -> DiceData {
+
+    lazy_static! {
+        static ref RE: Regex = Regex::new(r"([0-9]+)d([0-9]+)([+-]){0,1}([0-9]+){0,1}").unwrap();
+    }
+
     let captures = RE.captures(notation).unwrap();
 
     let data = DiceData {
