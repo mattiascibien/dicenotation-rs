@@ -9,12 +9,20 @@ pub fn parse(notation : &str) -> DiceData {
 
     let captures = RE.captures(notation).unwrap();
 
-    let data = DiceData {
+    let mut data = DiceData {
         num_dice: captures[1].parse::<u32>().unwrap(),
         num_faces: captures[2].parse::<u32>().unwrap(),
-        modifier: &captures[3] == "+",
-        modifier_val: captures[4].parse::<u32>().unwrap(),
+        modifier: false,
+        modifier_val: 0,
     };
+
+    if let Some(modifier) = captures.get(3) {
+        data.modifier = modifier.as_str() == "+";
+    } 
+
+    if let Some(modifier_val) = captures.get(4) {
+        data.modifier_val = modifier_val.as_str().parse::<u32>().unwrap();
+    } 
 
     data
 }
@@ -24,7 +32,6 @@ mod tests {
     use super::*;
 
     #[test]
-    #[ignore]
     fn it_parses_notation_correctly_without_modifier() {
         let data = parse("3d4");
         assert!(data == DiceData {
