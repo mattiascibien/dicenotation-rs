@@ -1,137 +1,42 @@
-# Based on the "trust" template v0.1.2
-# https://github.com/japaric/trust/tree/v0.1.2
-
-dist: trusty
 language: rust
-services: docker
-sudo: required
-env:
-  global:
-    - CRATE_NAME=dicenotation
-
-matrix:
-  include:
-    # Android
-    # - env: TARGET=aarch64-linux-android DISABLE_TESTS=1
-    # - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
-    # - env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
-    # - env: TARGET=i686-linux-android DISABLE_TESTS=1
-    # - env: TARGET=x86_64-linux-android DISABLE_TESTS=1
-
-    # iOS
-    # - env: TARGET=aarch64-apple-ios DISABLE_TESTS=1
-    #   os: osx
-    # - env: TARGET=armv7-apple-ios DISABLE_TESTS=1
-    #  os: osx
-    # - env: TARGET=armv7s-apple-ios DISABLE_TESTS=1
-    #  os: osx
-    # - env: TARGET=i386-apple-ios DISABLE_TESTS=1
-    #   os: osx
-    # - env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
-    #   os: osx
-
-    # Linux
-    - env: TARGET=aarch64-unknown-linux-gnu
-    - env: TARGET=arm-unknown-linux-gnueabi
-    - env: TARGET=armv7-unknown-linux-gnueabihf
-    - env: TARGET=i686-unknown-linux-gnu
-    # - env: TARGET=i686-unknown-linux-musl
-    # - env: TARGET=mips-unknown-linux-gnu
-    # - env: TARGET=mips64-unknown-linux-gnuabi64
-    # - env: TARGET=mips64el-unknown-linux-gnuabi64
-    # - env: TARGET=mipsel-unknown-linux-gnu
-    # - env: TARGET=powerpc-unknown-linux-gnu
-    # - env: TARGET=powerpc64-unknown-linux-gnu
-    # - env: TARGET=powerpc64le-unknown-linux-gnu
-    # - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
-    - env: TARGET=x86_64-unknown-linux-gnu
-    # - env: TARGET=x86_64-unknown-linux-musl
-
-    # OSX
-    - env: TARGET=i686-apple-darwin
-      os: osx
-    - env: TARGET=x86_64-apple-darwin
-      os: osx
-
-    # BSD
-    # - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
-    # - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
-    # - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
-
-    # Windows
-    # - env: TARGET=x86_64-pc-windows-gnu
-
-    # Testing other channels
-    - env: TARGET=x86_64-unknown-linux-gnu
-      rust: nightly
-    - env: TARGET=x86_64-apple-darwin
-      os: osx
-      rust: nightly
-
-before_install:
-  - set -e
-  - rustup self update
-
-install:
-  - sh ci/install.sh
-  - source ~/.cargo/env || true
-
-script:
-  - bash ci/script.sh
-
-after_script: set +e
-
-before_deploy:
-  - sh ci/before_deploy.sh
-
-deploy:
-  api_key:
-    secure: "tDDjy3Yj9lENTi6GWuu6wRC1BsHnZZfEhdbbeYMmTKcRSZT22/O6PEClouSgKMTNgmh7RwrFRQbh0HQsHnx35UQCIa7mlEBb+n8Mbr5VefddWUGU6cAdTdjvnx7qZpJ3rkEBwka1f9IWCr8483dLgRbffdZH5IkOiH0vqQCLUhIDsM2Qu+qZnVv5SpyOeQ/fmROw5C2JI6QNX4FHFwzLFEGdK3WmGDi3mtvPbFf8sk6kPeMDuzxmKeM5lL26S/id0aeebzirl5GXFlHa6phMCPqkBtbem0tS6az2KXEHN0yFQ2ROZMCiA0FDEibM8sqa7o1I1jwR2VtaxZbO38OU9y81T7WrrNFww0nLZ1iOQdQyxztZ4h28AiRJV1IRi1f6l87K9AUPUznOyPu+xbdeqr8NhZFVPV30Y3sJ/qHwofYpClaPRIE5hXyyDPwAN+R5eClj10ZPUqk2zy3CFc1yvkVKffjqi5i2Yz7I2EGGsMhw5GBQsbpHgauOKTcnNdPq3Nu66EWLSjlQbwllZaM49tT0ZbPlhc5HQk+a7kaS3Nvzb35cJ/is7UgsYECmQrE5o0YyzFe+hV0RULzwBXdbdOJW0Aw94G4MJ9+GoaJjqOi0/Hg0vhRm2zGkzFpgK0kdH8soo7xiSyy7FpZthsp2mAea/nDW1AQC6/2+lQwZu/M="
-  file_glob: true
-  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
-  on:
-    condition: $TRAVIS_RUST_VERSION = stable
-    tags: true
-  provider: releases
-  skip_cleanup: true
 
 cache: cargo
-before_cache:
-  # Travis can't cache files that are not readable by "others"
-  - chmod -R a+r $HOME/.cargo
 
 addons:
   apt:
     packages:
-      - libcurl4-openssl-dev
-      - libelf-dev
-      - libdw-dev
-      - cmake
-      - gcc
-      - binutils-dev
-      - libiberty-dev
+    - libcurl4-openssl-dev
+    - libelf-dev
+    - libdw-dev
+    - binutils-dev
 
-branches:
-  only:
-    # release tags
-    - /^v\d+\.\d+\.\d+.*$/
-    - master
+rust:
+- nightly
+- beta
+- stable
 
-notifications:
-  email:
-    on_success: never
+matrix:
+  allow_failures:
+    - rust: nightly
+  fast_finish: true
 
-after_success: |
-  wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
-  tar xzf master.tar.gz &&
-  cd kcov-master &&
-  mkdir build &&
-  cd build &&
-  cmake .. &&
-  make &&
-  make install DESTDIR=../../kcov-build &&
-  cd ../.. &&
-  rm -rf kcov-master &&
-  for file in target/debug/$CRATE_NAME-*[^\.d]; do mkdir -p "target/cov/$(basename $file)"; ./kcov-build/usr/local/bin/kcov --exclude-pattern=/.cargo,/usr/lib --verify "target/cov/$(basename $file)" "$file"; done &&
-  bash <(curl -s https://codecov.io/bash) &&
-  echo "Uploaded code coverage"
+before_script:
+- |
+  pip install 'travis-cargo<0.2' --user &&
+  export PATH=$HOME/.local/bin:$PATH
+
+script:
+- |
+  travis-cargo build &&
+  travis-cargo test &&
+  travis-cargo bench &&
+  travis-cargo --only stable doc
+
+after_success:
+- travis-cargo --only stable doc-upload
+- travis-cargo coveralls --no-sudo --verify
+
+env:
+  global:
+  - TRAVIS_CARGO_NIGHTLY_FEATURE=nightly
+  - secure: U7x3AEdxl3wtGO18UoPIQUOUUMKwLKFms45jBCG3aF3feIao+NVuhzjM7hLMet6wX3q8ByrM0QPzzDo41yaPMS1kU/o7Pq/wjvpU0w2Ud2CpNIYPwSdER7aSU/2mwBUPFNZAwgwn1AWSIMY2EthgFH99t2PYXy2/BdjhykWlI+uoWqQFSaYfVb1LeiTDqVURC6M4lTiItr0/tm5+vg5+17o24/lKE2LKyMOzWd+jVKGzueyNBnEoMQ+eZON7W+hcpjv2KmQ49INfIrngviKzgVB0+NXp5R0JSd/W1zSjxZHiQCo9j6iDnq0p/INTugDowRl0aqWo0QcRPtJD4rTekXZonUy8F99DsIs08X0ThJhSKJsDBUXdGJ5HdBUP+C04wElbTo+e/ft4FHqLUiqjrzo9LaXUa6IgWlaKwgkoPjFa4bjr8mu6LqcySYchEzZUzG3XFmWoHrS4rsGZvmBqt4PeReIRul14M7NPnsskYDU/k1tx4ipHmqDnjd0qhojo3xjtDY/lM8wHak7iEaW4dNj84fJtGqlQ/S3hmUuQF94yqWWVsW2RKwnXGRyFr+NCbt7bYtQ8fvjNK751GP51jkrIvcfY9Ok9GIp3ecgjWxBU46zaJMUix78a/+aVSKtYTR2/Lkxx8Hp522W/3MQKLk17Qx+9y9GT8COcAIArDp4=
