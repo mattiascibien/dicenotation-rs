@@ -1,42 +1,38 @@
 language: rust
 
-cache: cargo
-
-addons:
-  apt:
-    packages:
-    - libcurl4-openssl-dev
-    - libelf-dev
-    - libdw-dev
-    - binutils-dev
+sudo: required
 
 rust:
-- nightly
-- beta
-- stable
+  - stable
+  - beta
+  - nightly
 
 matrix:
   allow_failures:
     - rust: nightly
-  fast_finish: true
 
-before_script:
-- |
-  pip install 'travis-cargo<0.2' --user &&
-  export PATH=$HOME/.local/bin:$PATH
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - cmake
+      - gcc
+      - binutils-dev
+      - libiberty-dev
 
-script:
-- |
-  travis-cargo build &&
-  travis-cargo test &&
-  travis-cargo bench &&
-  travis-cargo --only stable doc
-
-after_success:
-- travis-cargo --only stable doc-upload
-- travis-cargo coveralls --no-sudo --verify
-
-env:
-  global:
-  - TRAVIS_CARGO_NIGHTLY_FEATURE=nightly
-  - secure: U7x3AEdxl3wtGO18UoPIQUOUUMKwLKFms45jBCG3aF3feIao+NVuhzjM7hLMet6wX3q8ByrM0QPzzDo41yaPMS1kU/o7Pq/wjvpU0w2Ud2CpNIYPwSdER7aSU/2mwBUPFNZAwgwn1AWSIMY2EthgFH99t2PYXy2/BdjhykWlI+uoWqQFSaYfVb1LeiTDqVURC6M4lTiItr0/tm5+vg5+17o24/lKE2LKyMOzWd+jVKGzueyNBnEoMQ+eZON7W+hcpjv2KmQ49INfIrngviKzgVB0+NXp5R0JSd/W1zSjxZHiQCo9j6iDnq0p/INTugDowRl0aqWo0QcRPtJD4rTekXZonUy8F99DsIs08X0ThJhSKJsDBUXdGJ5HdBUP+C04wElbTo+e/ft4FHqLUiqjrzo9LaXUa6IgWlaKwgkoPjFa4bjr8mu6LqcySYchEzZUzG3XFmWoHrS4rsGZvmBqt4PeReIRul14M7NPnsskYDU/k1tx4ipHmqDnjd0qhojo3xjtDY/lM8wHak7iEaW4dNj84fJtGqlQ/S3hmUuQF94yqWWVsW2RKwnXGRyFr+NCbt7bYtQ8fvjNK751GP51jkrIvcfY9Ok9GIp3ecgjWxBU46zaJMUix78a/+aVSKtYTR2/Lkxx8Hp522W/3MQKLk17Qx+9y9GT8COcAIArDp4=
+after_success: |
+  wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
+  tar xzf master.tar.gz &&
+  cd kcov-master &&
+  mkdir build &&
+  cd build &&
+  cmake .. &&
+  make &&
+  make install DESTDIR=../../kcov-build &&
+  cd ../.. &&
+  rm -rf kcov-master &&
+  for file in target/debug/dicenotation-*[^\.d]; do mkdir -p "target/cov/$(basename $file)"; ./kcov-build/usr/local/bin/kcov --exclude-pattern=/.cargo,/usr/lib --verify "target/cov/$(basename $file)" "$file"; done &&
+  bash <(curl -s https://codecov.io/bash) &&
+  echo "Uploaded code coverage"
