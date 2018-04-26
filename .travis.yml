@@ -38,7 +38,7 @@ after_success: |
   echo "Uploaded code coverage"
   if [ $TRAVIS_RUST_VERSION == stable ]; then
     cargo doc \
-    && echo '<meta http-equiv=refresh content=0;url=dicenotation-rs/index.html>' > target/doc/index.html && \
+    && echo '<meta http-equiv=refresh content=0;url=dicenotation/index.html>' > target/doc/index.html && \
     sudo pip install ghp-import && \
     ghp-import -n target/doc && \
     git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
