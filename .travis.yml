@@ -36,3 +36,11 @@ after_success: |
   for file in target/debug/dicenotation-*[^\.d]; do mkdir -p "target/cov/$(basename $file)"; ./kcov-build/usr/local/bin/kcov --exclude-pattern=/.cargo,/usr/lib --verify "target/cov/$(basename $file)" "$file"; done &&
   bash <(curl -s https://codecov.io/bash) &&
   echo "Uploaded code coverage"
+  if [ $TRAVIS_RUST_VERSION == stable ]; then
+    cargo doc \
+    && echo '<meta http-equiv=refresh content=0;url=dicenotation-rs/index.html>' > target/doc/index.html && \
+    sudo pip install ghp-import && \
+    ghp-import -n target/doc && \
+    git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+    echo "Uploaded documentation"
+  fi
