@@ -17,11 +17,10 @@ main() {
 
     test -f Cargo.lock || cargo generate-lockfile
 
-    cross rustc --bin dicenotation --target $TARGET --release -- -C lto
+    cross rustc --target $TARGET --release -- -C lto
 
     cp target/$TARGET/release/libdicenotation.rlib $stage/
     cp target/$TARGET/release/libdicenotation.d $stage/
-    cp target/$TARGET/release/dicenotation $stage/
 
     cd $stage
     tar czf $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.tar.gz *

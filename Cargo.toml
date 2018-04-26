@@ -4,3 +4,7 @@ version = "0.1.0"
 authors = ["Mattias Cibien <mattias@mattiascibien.net>"]
 
 [dependencies]
+
+
+[dev-dependencies]
+clap = "2.31"
