@@ -9,6 +9,7 @@ extern crate dicenotation;
 extern crate clap;
 
 use clap::{Arg, App};
+use std::process;
 
 fn main() {
     let matches = App::new("Dice Roller")
@@ -21,9 +22,13 @@ fn main() {
                     .takes_value(true))
                 .get_matches();
 
-     let notation = matches.value_of("notation").unwrap();
+    let notation = matches.value_of("notation").unwrap();
+    
+    let result = dicenotation::roll_dice(notation).unwrap_or_else(|err| {
+        println!("Problem parsing notation: {}", err);
+        process::exit(1)
+    });
 
-     println!("Rolling: {}", notation);
-     // TODO: handle error
-     println!("\t-> {}", dicenotation::roll_dice(notation).unwrap());
+    println!("Rolling: {}", notation);
+    println!("\t-> {}", result);
 }

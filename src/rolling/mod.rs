@@ -58,7 +58,7 @@ mod tests {
 
         let result = roll(data);
 
-        assert!(result >= 0);
+        // assert!(result >= 0); TODO: check when we extend to unsigned
         assert!(result <= 4);
     }
 }

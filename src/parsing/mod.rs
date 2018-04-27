@@ -67,4 +67,9 @@ mod tests {
             modifier_val: 1,
         });
     }
+
+    #[test]
+    fn it_does_not_parse_gibberish() {
+        assert!(parse("ad1d-1").is_err());
+    }
 }
