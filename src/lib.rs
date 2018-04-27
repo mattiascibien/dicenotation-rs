@@ -5,6 +5,10 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
+//! Library aimed at parsing and rolling dices 
+//! for Role-Playing games using [Standard Dice Notation](https://en.wikipedia.org/wiki/Dice_notation#Standard_notation) 
+//! that bears inspiration from the  [dicenotation](https://github.com/mattiascibien/dicenotation) library. 
+
 #[macro_use] extern crate lazy_static;
 extern crate regex;
 extern crate rand;
