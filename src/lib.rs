@@ -39,9 +39,11 @@ impl PartialEq for DiceData {
 }
 
 /// Execute a dice roll based on the given notation
+/// 
 /// # Examples
 /// 
 /// Gets the result of rolling 3 die of 5 faces
+/// 
 /// ```
 /// use dicenotation::roll_dice;
 /// 
@@ -49,11 +51,12 @@ impl PartialEq for DiceData {
 /// ```
 /// 
 /// Executes two rolls by summing their values
+/// 
 /// ```
 /// use dicenotation::roll_dice;
 /// 
-/// let result = roll_dice("3d5") + roll_dice("2d3");
-/// ```
+/// let result = roll_dice("3d5").unwrap() + roll_dice("2d3").unwrap();
+/// ``` 
 pub fn roll_dice(notation : &str) -> Result<u32, &str> {
     let dice_data = parsing::parse(notation);
 
