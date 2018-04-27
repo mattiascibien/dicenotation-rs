@@ -12,11 +12,16 @@ extern crate rand;
 mod rolling;
 mod parsing;
 
+/// Struct represeting a die roll data
 #[derive(Debug)]
 pub struct DiceData {
+    /// Number of die to roll
     num_dice: u32,
+    /// Number of faces of each dice
     num_faces: u32,
+    /// Modifies (true for plus, false for minus)
     modifier: bool,
+    /// Modifier value (alters the result of the die roll)
     modifier_val: u32
 }
 
@@ -29,6 +34,22 @@ impl PartialEq for DiceData {
     }
 }
 
+/// Execute a dice roll based on the given notation
+/// # Examples
+/// 
+/// Gets the result of rolling 3 die of 5 faces
+/// ```
+/// use dicenotation::roll_dice;
+/// 
+/// let result = roll_dice("3d5");
+/// ```
+/// 
+/// Executes two rolls by summing their values
+/// ```
+/// use dicenotation::roll_dice;
+/// 
+/// let result = roll_dice("3d5") + roll_dice("2d3");
+/// ```
 pub fn roll_dice(notation : &str) -> u32 {
     let dice_data = parsing::parse(notation);
     let result = rolling::roll(dice_data);
