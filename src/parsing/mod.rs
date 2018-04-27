@@ -1,13 +1,16 @@
 use super::regex::Regex;
 use super::DiceData;
 
-pub fn parse(notation : &str) -> DiceData {
+pub fn parse(notation : &str) -> Result<DiceData, &str> {
 
     lazy_static! {
         static ref RE: Regex = Regex::new(r"([0-9]+)d([0-9]+)([+-]){0,1}([0-9]+){0,1}").unwrap();
     }
 
-    let captures = RE.captures(notation).unwrap();
+    let captures = match RE.captures(notation) {
+        Some(c) => c,
+        None => return Err("cannot parse")
+    };
 
     let mut data = DiceData {
         num_dice: captures[1].parse::<u32>().unwrap(),
@@ -24,7 +27,7 @@ pub fn parse(notation : &str) -> DiceData {
         data.modifier_val = modifier_val.as_str().parse::<u32>().unwrap();
     } 
 
-    data
+    Ok(data)
 }
 
 #[cfg(test)]
@@ -33,7 +36,7 @@ mod tests {
 
     #[test]
     fn it_parses_notation_correctly_without_modifier() {
-        let data = parse("3d4");
+        let data = parse("3d4").unwrap();
         assert!(data == DiceData {
             num_dice: 3,
             num_faces: 4,
@@ -44,7 +47,7 @@ mod tests {
 
     #[test]
     fn it_parses_notation_correctly_with_plus_modifier() {
-        let data = parse("3d4+1");
+        let data = parse("3d4+1").unwrap();
         assert!(data == DiceData {
             num_dice: 3,
             num_faces: 4,
@@ -55,7 +58,7 @@ mod tests {
 
     #[test]
     fn it_parses_notation_correctly_with_minus_modifier() {
-        let data = parse("3d4-1");
+        let data = parse("3d4-1").unwrap();
         println!("{:?}", data);
          assert!(data == DiceData {
             num_dice: 3,
@@ -64,5 +67,4 @@ mod tests {
             modifier_val: 1,
         });
     }
-
 }

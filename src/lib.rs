@@ -54,9 +54,15 @@ impl PartialEq for DiceData {
 /// 
 /// let result = roll_dice("3d5") + roll_dice("2d3");
 /// ```
-pub fn roll_dice(notation : &str) -> u32 {
+pub fn roll_dice(notation : &str) -> Result<u32, &str> {
     let dice_data = parsing::parse(notation);
+
+    let dice_data = match dice_data {
+        Ok(d) => d,
+        Err(e) => return Err(e)
+    };
+
     let result = rolling::roll(dice_data);
 
-    result
+    Ok(result)
 }

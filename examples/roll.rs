@@ -24,6 +24,6 @@ fn main() {
      let notation = matches.value_of("notation").unwrap();
 
      println!("Rolling: {}", notation);
-     // TODO: roll the dice using the library
-     println!("\t-> {}", dicenotation::roll_dice(notation) )
+     // TODO: handle error
+     println!("\t-> {}", dicenotation::roll_dice(notation).unwrap());
 }
