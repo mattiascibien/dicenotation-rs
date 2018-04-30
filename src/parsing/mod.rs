@@ -1,12 +1,11 @@
 use super::regex::Regex;
 use super::DiceData;
 
-use super::num_traits::Num;
+use super::num_traits::int::PrimInt;
 use std::str::FromStr;
 use std::fmt::Debug;
 
-pub fn parse<T>(notation : &str) -> Result<DiceData<T>, &str> where T : Num + FromStr, <T as FromStr>::Err : Debug {
-
+pub fn parse<T>(notation : &str) -> Result<DiceData<T>, &str> where T : PrimInt + FromStr, <T as FromStr>::Err : Debug {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"([0-9]+)d([0-9]+)([+-]){0,1}([0-9]+){0,1}").unwrap();
     }

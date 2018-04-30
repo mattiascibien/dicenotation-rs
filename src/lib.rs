@@ -15,18 +15,17 @@ extern crate rand;
 extern crate num_traits;
 extern crate num_iter;
 
-mod rolling;
-mod parsing;
-
-use num_traits::Num;
-use num_traits::ToPrimitive;
 use std::str::FromStr;
+use num_traits::int::PrimInt;
 use std::fmt::Debug;
 use rand::distributions::range::SampleRange;
 
+mod rolling;
+mod parsing;
+
 /// Struct represeting a die roll data
 #[derive(Debug)]
-pub struct DiceData<T> where T : Num {
+pub struct DiceData<T> where T: PrimInt {
     /// Number of die to roll
     num_dice: T,
     /// Number of faces of each dice
@@ -37,7 +36,7 @@ pub struct DiceData<T> where T : Num {
     modifier_val: T
 }
 
-impl<T> PartialEq for DiceData<T> where T: Num {
+impl<T> PartialEq for DiceData<T> where T: PrimInt {
     fn eq(&self, other: &DiceData<T> ) -> bool {
         self.num_dice == other.num_dice
         && self.num_faces == other.num_faces
@@ -65,7 +64,7 @@ impl<T> PartialEq for DiceData<T> where T: Num {
 /// 
 /// let result = roll_dice::<i32>("3d5").unwrap() + roll_dice::<i32>("2d3").unwrap();
 /// ``` 
-pub fn roll_dice<T>(notation : &str) -> Result<T, &str> where T : Num + FromStr + SampleRange + ToPrimitive + PartialOrd + Copy + Debug, <T as FromStr>::Err : Debug {
+pub fn roll_dice<T>(notation : &str) -> Result<T, &str> where T : PrimInt + FromStr + SampleRange, <T as FromStr>::Err : Debug {
     let dice_data = parsing::parse(notation);
 
     let dice_data = match dice_data {

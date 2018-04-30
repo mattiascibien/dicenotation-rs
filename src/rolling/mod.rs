@@ -10,14 +10,13 @@ use super::rand::{Rng};
 use super::rand::distributions::range::SampleRange;
 use super::DiceData;
 
-use super::num_traits::Num;
-use super::num_traits::ToPrimitive;
+use super::num_traits::int::PrimInt;
 use super::num_traits::zero;
 // TODO: not sure if this is correct
 use super::num_traits::one;
 use super::num_iter::range;
 
-pub fn roll<T>(dice_data: DiceData<T>) -> T where T : Num + PartialOrd + SampleRange + Copy + Clone + ToPrimitive {
+pub fn roll<T>(dice_data: DiceData<T>) -> T where T : PrimInt + SampleRange {
     let mut rng = rand::thread_rng();
 
     let mut result : T = zero();
