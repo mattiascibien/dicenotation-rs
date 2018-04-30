@@ -12,25 +12,33 @@
 #[macro_use] extern crate lazy_static;
 extern crate regex;
 extern crate rand;
+extern crate num_traits;
+extern crate num_iter;
 
 mod rolling;
 mod parsing;
 
+use num_traits::Num;
+use num_traits::ToPrimitive;
+use std::str::FromStr;
+use std::fmt::Debug;
+use rand::distributions::range::SampleRange;
+
 /// Struct represeting a die roll data
 #[derive(Debug)]
-pub struct DiceData {
+pub struct DiceData<T> where T : Num {
     /// Number of die to roll
-    num_dice: u32,
+    num_dice: T,
     /// Number of faces of each dice
-    num_faces: u32,
+    num_faces: T,
     /// Modifies (true for plus, false for minus)
     modifier: bool,
     /// Modifier value (alters the result of the die roll)
-    modifier_val: u32
+    modifier_val: T
 }
 
-impl PartialEq for DiceData {
-    fn eq(&self, other: &DiceData) -> bool {
+impl<T> PartialEq for DiceData<T> where T: Num {
+    fn eq(&self, other: &DiceData<T> ) -> bool {
         self.num_dice == other.num_dice
         && self.num_faces == other.num_faces
         && self.modifier == other.modifier
@@ -47,7 +55,7 @@ impl PartialEq for DiceData {
 /// ```
 /// use dicenotation::roll_dice;
 /// 
-/// let result = roll_dice("3d5");
+/// let result = roll_dice::<i32>("3d5");
 /// ```
 /// 
 /// Executes two rolls by summing their values
@@ -55,9 +63,9 @@ impl PartialEq for DiceData {
 /// ```
 /// use dicenotation::roll_dice;
 /// 
-/// let result = roll_dice("3d5").unwrap() + roll_dice("2d3").unwrap();
+/// let result = roll_dice::<i32>("3d5").unwrap() + roll_dice::<i32>("2d3").unwrap();
 /// ``` 
-pub fn roll_dice(notation : &str) -> Result<u32, &str> {
+pub fn roll_dice<T>(notation : &str) -> Result<T, &str> where T : Num + FromStr + SampleRange + ToPrimitive + PartialOrd + Copy + Debug, <T as FromStr>::Err : Debug {
     let dice_data = parsing::parse(notation);
 
     let dice_data = match dice_data {

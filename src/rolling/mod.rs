@@ -7,15 +7,23 @@
 
 use super::rand;
 use super::rand::{Rng};
+use super::rand::distributions::range::SampleRange;
 use super::DiceData;
 
-pub fn roll(dice_data: DiceData) -> u32 {
+use super::num_traits::Num;
+use super::num_traits::ToPrimitive;
+use super::num_traits::zero;
+// TODO: not sure if this is correct
+use super::num_traits::one;
+use super::num_iter::range;
+
+pub fn roll<T>(dice_data: DiceData<T>) -> T where T : Num + PartialOrd + SampleRange + Copy + Clone + ToPrimitive {
     let mut rng = rand::thread_rng();
 
-    let mut result = 0;
+    let mut result : T = zero();
 
-    for _i in 0..dice_data.num_dice {
-        let roll : u32 = rng.gen_range(0, dice_data.num_faces) + 1;
+    for _i in range(zero(), dice_data.num_dice) {
+        let roll : T = rng.gen_range(zero(), dice_data.num_faces) + one();
         result = result + roll;
     }
 

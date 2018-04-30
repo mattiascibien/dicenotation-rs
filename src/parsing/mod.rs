@@ -1,7 +1,11 @@
 use super::regex::Regex;
 use super::DiceData;
 
-pub fn parse(notation : &str) -> Result<DiceData, &str> {
+use super::num_traits::Num;
+use std::str::FromStr;
+use std::fmt::Debug;
+
+pub fn parse<T>(notation : &str) -> Result<DiceData<T>, &str> where T : Num + FromStr, <T as FromStr>::Err : Debug {
 
     lazy_static! {
         static ref RE: Regex = Regex::new(r"([0-9]+)d([0-9]+)([+-]){0,1}([0-9]+){0,1}").unwrap();
@@ -13,10 +17,10 @@ pub fn parse(notation : &str) -> Result<DiceData, &str> {
     };
 
     let mut data = DiceData {
-        num_dice: captures[1].parse::<u32>().unwrap(),
-        num_faces: captures[2].parse::<u32>().unwrap(),
+        num_dice: captures[1].parse::<T>().unwrap(),
+        num_faces: captures[2].parse::<T>().unwrap(),
         modifier: false,
-        modifier_val: 0,
+        modifier_val: T::zero(),
     };
 
     if let Some(modifier) = captures.get(3) {
@@ -24,52 +28,11 @@ pub fn parse(notation : &str) -> Result<DiceData, &str> {
     } 
 
     if let Some(modifier_val) = captures.get(4) {
-        data.modifier_val = modifier_val.as_str().parse::<u32>().unwrap();
+        data.modifier_val = modifier_val.as_str().parse::<T>().unwrap();
     } 
 
     Ok(data)
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_parses_notation_correctly_without_modifier() {
-        let data = parse("3d4").unwrap();
-        assert!(data == DiceData {
-            num_dice: 3,
-            num_faces: 4,
-            modifier: false,
-            modifier_val: 0,
-        });
-    }
-
-    #[test]
-    fn it_parses_notation_correctly_with_plus_modifier() {
-        let data = parse("3d4+1").unwrap();
-        assert!(data == DiceData {
-            num_dice: 3,
-            num_faces: 4,
-            modifier: true,
-            modifier_val: 1,
-        });
-    }
-
-    #[test]
-    fn it_parses_notation_correctly_with_minus_modifier() {
-        let data = parse("3d4-1").unwrap();
-        println!("{:?}", data);
-         assert!(data == DiceData {
-            num_dice: 3,
-            num_faces: 4,
-            modifier: false,
-            modifier_val: 1,
-        });
-    }
-
-    #[test]
-    fn it_does_not_parse_gibberish() {
-        assert!(parse("ad1d-1").is_err());
-    }
-}
+mod test;
