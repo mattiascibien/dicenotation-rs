@@ -29,7 +29,7 @@ addons:
 before_script:
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" ]]; then
-        ( cargo install rustfmt --force || true );
+        ( cargo install rustfmt-nightly --force || true );
       fi
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "nightly" ]]; then
