@@ -14,6 +14,7 @@ extern crate regex;
 extern crate rand;
 extern crate num_traits;
 extern crate num_iter;
+extern crate libc;
 
 use std::str::FromStr;
 use num_traits::int::PrimInt;
@@ -22,6 +23,8 @@ use rand::distributions::range::SampleRange;
 
 mod rolling;
 mod parsing;
+
+pub mod ffi;
 
 /// Struct represeting a die roll data
 #[derive(Debug)]
