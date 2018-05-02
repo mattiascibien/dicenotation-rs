@@ -8,7 +8,7 @@ description = "Standard Dice Notation (parsing and die rolling) for Rust"
 readme = "README.md"
 documentation = "https://docs.rs/dicenotation"
 keywords = ["dice", "rng", "standard-dice-notation", "dice-notation"]
-
+build = "build.rs"
 
 [dependencies]
 lazy_static = "1.0"
@@ -16,6 +16,9 @@ regex = "0.2"
 rand = "0.4"
 num-traits = "0.2"
 num-iter = "0.1"
+
+[build-dependencies]
+cbindgen = "0.6"
 
 [dev-dependencies]
 clap = "2.31"
