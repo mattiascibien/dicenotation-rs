@@ -7,7 +7,7 @@ license = "MIT/Apache-2.0"
 description = "Standard Dice Notation (parsing and die rolling) for Rust"
 readme = "README.md"
 documentation = "https://docs.rs/dicenotation"
-keywords = ["dice", "rng", "standard-dice-notation", "dice-notation"]
+keywords = ["dice", "rng", "dice-notation"]
 
 
 [dependencies]
