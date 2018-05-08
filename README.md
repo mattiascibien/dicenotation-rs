@@ -16,4 +16,4 @@ This project is licensed under either of
  * MIT license (LICENSE-MIT or http://opensource.org/licenses/MIT) at your option.
 
 ### Contribution
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in git2-rs by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in dicenotation-rs by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
