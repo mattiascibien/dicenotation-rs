@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["roll_dice","Execute a dice roll based on the given notation"]],"struct":[["DiceData","Struct represeting a die roll data"]]});
