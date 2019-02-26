@@ -3,7 +3,7 @@ name = "dicenotation"
 version = "0.2.0"
 authors = ["Mattias Cibien <mattias@mattiascibien.net>"]
 license = "MIT/Apache-2.0"
-
+edition = "2018"
 description = "Standard Dice Notation (parsing and die rolling) for Rust"
 readme = "README.md"
 documentation = "https://docs.rs/dicenotation"
