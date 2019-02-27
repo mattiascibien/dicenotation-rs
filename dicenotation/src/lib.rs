@@ -9,11 +9,13 @@
 //! for Role-Playing games using [Standard Dice Notation](https://en.wikipedia.org/wiki/Dice_notation#Standard_notation) 
 //! that bears inspiration from the  [dicenotation](https://github.com/mattiascibien/dicenotation) library. 
 
+#![forbid(unsafe_code)]
+
 #[macro_use] extern crate lazy_static;
-extern crate regex;
-extern crate rand;
-extern crate num_traits;
-extern crate num_iter;
+use regex;
+use rand;
+use num_traits;
+use num_iter;
 
 use std::str::FromStr;
 use num_traits::int::PrimInt;
