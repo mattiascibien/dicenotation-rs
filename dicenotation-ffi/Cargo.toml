@@ -7,6 +7,9 @@ edition = "2018"
 keywords = ["dice", "rng", "standard-dice-notation", "dice-notation"]
 build = "build.rs"
 
+[lib]
+crate-type = ["dylib"]
+
 [dependencies]
 libc = "0.2"
 dicenotation = { path = "../dicenotation" }
