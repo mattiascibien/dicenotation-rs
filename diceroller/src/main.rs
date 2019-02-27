@@ -5,9 +5,6 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
-extern crate dicenotation;
-extern crate clap;
-
 use clap::{Arg, App};
 
 fn main() {

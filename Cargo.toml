@@ -1,5 +1,6 @@
 [workspace]
 members = [
     "dicenotation",
+    "dicenotation-ffi",
     "diceroller"
 ]

@@ -1,7 +1,7 @@
 [package]
 name = "diceroller"
 version = "0.1.0"
-authors = ["Mattias Cibien <mattias.cibien@kalpa.it>"]
+authors = ["Mattias Cibien <mattias@mattiascibien.net>"]
 edition = "2018"
 
 [dependencies]

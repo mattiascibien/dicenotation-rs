@@ -1,0 +1,15 @@
+[package]
+name = "dicenotation-ffi"
+version = "0.1.0"
+authors = ["Mattias Cibien <mattias@mattiascibien.net>"]
+description = "dicenotation FFI bindings"
+edition = "2018"
+keywords = ["dice", "rng", "standard-dice-notation", "dice-notation"]
+build = "build.rs"
+
+[dependencies]
+libc = "0.2"
+dicenotation = { path = "../dicenotation" }
+
+[build-dependencies]
+cbindgen = "0.8"
