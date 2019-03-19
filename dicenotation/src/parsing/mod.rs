@@ -1,7 +1,7 @@
-use super::regex::Regex;
+use regex::Regex;
 use super::DiceData;
 
-use super::num_traits::int::PrimInt;
+use num_traits::int::PrimInt;
 use std::fmt::Debug;
 use std::str::FromStr;
 

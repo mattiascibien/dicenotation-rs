@@ -13,10 +13,8 @@
 
 #[macro_use]
 extern crate lazy_static;
-use num_iter;
 use num_traits;
 use rand;
-use regex;
 
 use num_traits::int::PrimInt;
 use rand::distributions::range::SampleRange;

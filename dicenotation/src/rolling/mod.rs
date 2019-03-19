@@ -5,16 +5,16 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
-use super::rand;
-use super::rand::distributions::range::SampleRange;
-use super::rand::Rng;
+use rand;
+use rand::distributions::range::SampleRange;
+use rand::Rng;
 use super::DiceData;
 
-use super::num_traits::int::PrimInt;
-use super::num_traits::zero;
+use num_traits::int::PrimInt;
+use num_traits::zero;
 // TODO: not sure if this is correct
-use super::num_iter::range;
-use super::num_traits::one;
+use num_iter::range;
+use num_traits::one;
 
 pub fn roll<T>(dice_data: DiceData<T>) -> T
 where
