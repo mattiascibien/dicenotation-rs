@@ -6,7 +6,7 @@ fn it_rolls_two_dices_of_three_faces_with_modifier_plus_two_correctly() {
         num_dice: 2,
         num_faces: 3,
         modifier: true,
-        modifier_val: 2
+        modifier_val: 2,
     };
 
     let result = roll(data);
@@ -21,7 +21,7 @@ fn it_rolls_two_dices_of_three_faces_with_modifier_minus_two_correctly() {
         num_dice: 2,
         num_faces: 3,
         modifier: false,
-        modifier_val: 2
+        modifier_val: 2,
     };
 
     let result = roll(data);

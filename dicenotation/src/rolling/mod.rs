@@ -6,23 +6,34 @@
 // copied, modified, or distributed except according to those terms.
 
 use super::rand;
-use super::rand::{Rng};
 use super::rand::distributions::range::SampleRange;
+use super::rand::Rng;
 use super::DiceData;
 
 use super::num_traits::int::PrimInt;
 use super::num_traits::zero;
 // TODO: not sure if this is correct
-use super::num_traits::one;
 use super::num_iter::range;
+use super::num_traits::one;
 
-pub fn roll<T>(dice_data: DiceData<T>) -> T where T : PrimInt + SampleRange {
+pub fn roll<T>(dice_data: DiceData<T>) -> T
+where
+    T: PrimInt + SampleRange,
+{
     let mut rng = rand::thread_rng();
 
-    let mut result : T = zero();
+    roll_with_fn(dice_data, |a, b| { rng.gen_range(a,b) })
+}
+
+pub fn roll_with_fn<T,F>(dice_data: DiceData<T>, mut function: F) -> T
+where
+    T: PrimInt + SampleRange,
+    F: FnMut(T,T) -> T,
+{
+    let mut result: T = zero();
 
     for _i in range(zero(), dice_data.num_dice) {
-        let roll : T = rng.gen_range(zero(), dice_data.num_faces) + one();
+        let roll: T = function(zero(), dice_data.num_faces) + one();
         result = result + roll;
     }
 

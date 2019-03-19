@@ -91,6 +91,23 @@ where
     Ok(result)
 }
 
+pub fn roll_dice_with_fn<T,F>(notation: &str, random: F) -> Result<T, &str>
+where
+    T: PrimInt + FromStr + SampleRange,
+    <T as FromStr>::Err: Debug,
+    F: Fn(T,T) -> T,
+{
+    let dice_data = parsing::parse(notation);
+
+    let dice_data = match dice_data {
+        Ok(d) => d,
+        Err(e) => return Err(e),
+    };
+
+    let result = rolling::roll_with_fn(dice_data, &random);
+
+    Ok(result)
+}
 #[cfg(test)]
 mod test {
 
