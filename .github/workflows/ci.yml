@@ -84,3 +84,16 @@ jobs:
         with:
           command: clippy
           args: -- -D warnings
+
+  build:
+    needs: [ check, test ]
+    strategy:
+      matrix:
+        rust_version: [ stable, nightly, 1.49.0 ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+
+    name: Build
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
