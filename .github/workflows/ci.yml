@@ -1,6 +1,11 @@
 name: Rust
 
-on: [push, pull_request]
+on: 
+  push:
+    branches: [master]
+    tags:        
+      - '**'     
+  pull_request: [master]
 
 env:
   CARGO_TERM_COLOR: always
@@ -85,15 +90,35 @@ jobs:
           command: clippy
           args: -- -D warnings
 
-  build:
+  build-native:
     needs: [ check, test ]
     strategy:
       matrix:
-        rust_version: [ stable, nightly, 1.49.0 ]
+        rust_version: [ stable ]
         os: [ ubuntu-latest, windows-latest, macos-latest ]
 
-    name: Build
+    name: Build Native library and SDK
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+      - name: Run cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - name: Copy artifacts from FFI
+        run: |
+          echo TODO
+      - name: Publish artifacts
+        run: |
+          echo TODO
+
+  # publish:
+  #   if 
