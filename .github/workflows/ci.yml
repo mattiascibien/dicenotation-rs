@@ -76,11 +76,13 @@ jobs:
 
       - name: Run cargo fmt
         uses: actions-rs/cargo@v1
+        continue-on-error: true
         with:
           command: fmt
           args: --all -- --check
 
       - name: Run cargo clippy
+        continue-on-error: true
         uses: actions-rs/cargo@v1
         with:
           command: clippy
@@ -93,7 +95,7 @@ jobs:
         rust_version: [ stable ]
         os: [ ubuntu-latest, windows-latest, macos-latest ]
 
-    name: Build Native library and SDK
+    name: Build C/C++ SDK
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout sources
@@ -117,4 +119,6 @@ jobs:
           echo TODO
 
   # publish:
+  #   needs: [ check, test ]
+  #   name: Publish on Cargo
   #   if 
