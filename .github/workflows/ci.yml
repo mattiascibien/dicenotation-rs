@@ -1,22 +1,78 @@
 name: Rust
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+strategy:
+  matrix:
+    rust_version: [ stable, nightly, 1.49.0 ]
+    os: [ ubuntu-latest, windows-latest, macos-latest ]
+
+on: [push, pull_request]
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  check:
+    name: Check
+    runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+  test:
+    name: Test Suite
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+
+      - name: Run cargo test
+        uses: actions-rs/cargo@v1
+        continue-on-error: true  # WARNING: only for this example, remove it!
+        with:
+          command: test
+
+  lints:
+    name: Lints
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+          components: rustfmt, clippy
+
+      - name: Run cargo fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+      - name: Run cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
