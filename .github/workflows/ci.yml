@@ -56,8 +56,8 @@ jobs:
   lints:
     strategy:
       matrix:
-        rust_version: [ stable, nightly, 1.49.0 ]
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        rust_version: [ stable ]
+        os: [ ubuntu-latest ]
     name: Lints
     runs-on: ${{ matrix.os }}
     steps:
