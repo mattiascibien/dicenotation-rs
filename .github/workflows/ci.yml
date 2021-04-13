@@ -9,8 +9,8 @@ jobs:
   check:
     strategy:
       matrix:
-      rust_version: [ stable, nightly, 1.49.0 ]
-      os: [ ubuntu-latest, windows-latest, macos-latest ]
+        rust_version: [ stable, nightly, 1.49.0 ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
     name: Check
     runs-on: ${{ matrix.os }}
     steps:
@@ -32,8 +32,8 @@ jobs:
   test:
     strategy:
       matrix:
-      rust_version: [ stable, nightly, 1.49.0 ]
-      os: [ ubuntu-latest, windows-latest, macos-latest ]
+        rust_version: [ stable, nightly, 1.49.0 ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
     name: Test Suite
     runs-on: ${{ matrix.os }}
     steps:
@@ -56,8 +56,7 @@ jobs:
   lints:
     strategy:
       matrix:
-      rust_version: [ stable, nightly, 1.49.0 ]
-      os: [ ubuntu-latest, windows-latest, macos-latest ]
+      bu
     name: Lints
     runs-on: ${{ matrix.os }}
     steps:
