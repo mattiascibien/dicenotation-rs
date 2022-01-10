@@ -111,12 +111,26 @@ jobs:
         with:
           command: build
           args: --release
-      - name: Copy artifacts from FFI
-        run: |
-          echo TODO
-      - name: Publish artifacts
-        run: |
-          echo TODO
+      - name: Publish Header
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/dicenotation-ffi.h
+      - name: Publish DLL
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/release/dicenotation_ffi.dll*
+      - name: Publish SO
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/release/libdicenotation_ffi.so
+      - name: Publish SO
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/release/dicenotation_ffi.dylib
 
   # publish:
   #   needs: [ check, test ]
