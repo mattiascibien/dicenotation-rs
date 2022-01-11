@@ -130,7 +130,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: cpp_sdk
-          path: target/release/dicenotation_ffi.dylib
+          path: target/release/libdicenotation_ffi.dylib
 
   # publish:
   #   needs: [ check, test ]
