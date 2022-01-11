@@ -88,7 +88,7 @@ jobs:
           command: clippy
           args: -- -D warnings
 
-  build-native:
+  build-cpp-sdk:
     needs: [ check, test ]
     strategy:
       matrix:
@@ -115,7 +115,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: cpp_sdk
-          path: target/dicenotation-ffi.h
+          path: target/dicenotation-ffi.hpp
       - name: Publish DLL
         uses: actions/upload-artifact@v2
         with:
@@ -126,7 +126,7 @@ jobs:
         with:
           name: cpp_sdk
           path: target/release/libdicenotation_ffi.so
-      - name: Publish SO
+      - name: Publish DYLIB
         uses: actions/upload-artifact@v2
         with:
           name: cpp_sdk
