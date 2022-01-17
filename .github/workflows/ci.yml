@@ -1,0 +1,138 @@
+name: Rust
+
+on: 
+  push:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        rust_version: [ stable, nightly, 1.49.0 ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    name: Check
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+  test:
+    needs: [check]
+    strategy:
+      matrix:
+        rust_version: [ stable, nightly, 1.49.0 ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    name: Test Suite
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+
+      - name: Run cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+
+  lints:
+    needs: [check]
+    strategy:
+      matrix:
+        rust_version: [ stable ]
+        os: [ ubuntu-latest ]
+    name: Lints
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+          components: rustfmt, clippy
+
+      - name: Run cargo fmt
+        uses: actions-rs/cargo@v1
+        continue-on-error: true
+        with:
+          command: fmt
+          args: --all -- --check
+
+      - name: Run cargo clippy
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
+
+  build-cpp-sdk:
+    needs: [ check, test ]
+    strategy:
+      matrix:
+        rust_version: [ stable ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+
+    name: Build C/C++ SDK
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Install ${{ matrix.rust_version }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+          override: true
+      - name: Run cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - name: Publish Header
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/dicenotation-ffi.hpp
+      - name: Publish DLL
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/release/dicenotation_ffi.dll*
+      - name: Publish SO
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/release/libdicenotation_ffi.so
+      - name: Publish DYLIB
+        uses: actions/upload-artifact@v2
+        with:
+          name: cpp_sdk
+          path: target/release/libdicenotation_ffi.dylib
+
+  # publish:
+  #   needs: [ check, test ]
+  #   name: Publish on Cargo
+  #   if 
