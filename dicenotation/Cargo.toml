@@ -13,8 +13,7 @@ keywords = ["dice", "rng", "dice-notation"]
 
 [dependencies]
 lazy_static = "1.0"
-regex = "0.2"
+regex = "1.12"
 rand = "0.4"
 num-traits = "0.2"
 num-iter = "0.1"
-
