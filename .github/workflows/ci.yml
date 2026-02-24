@@ -1,6 +1,6 @@
 name: Rust
 
-on: 
+on:
   push:
 
 env:
@@ -10,8 +10,8 @@ jobs:
   check:
     strategy:
       matrix:
-        rust_version: [ stable, nightly, 1.49.0 ]
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        rust_version: [stable, nightly, 1.49.0]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     name: Check
     runs-on: ${{ matrix.os }}
     steps:
@@ -34,8 +34,8 @@ jobs:
     needs: [check]
     strategy:
       matrix:
-        rust_version: [ stable, nightly, 1.49.0 ]
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        rust_version: [stable, nightly, 1.49.0]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     name: Test Suite
     runs-on: ${{ matrix.os }}
     steps:
@@ -54,12 +54,20 @@ jobs:
         with:
           command: test
 
+      - name: rust-grcov
+        uses: actions-rs/grcov@v0.1
+
+      - name: Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
+
   lints:
     needs: [check]
     strategy:
       matrix:
-        rust_version: [ stable ]
-        os: [ ubuntu-latest ]
+        rust_version: [stable]
+        os: [ubuntu-latest]
     name: Lints
     runs-on: ${{ matrix.os }}
     steps:
@@ -89,11 +97,11 @@ jobs:
           args: -- -D warnings
 
   build-cpp-sdk:
-    needs: [ check, test ]
+    needs: [check, test]
     strategy:
       matrix:
-        rust_version: [ stable ]
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        rust_version: [stable]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     name: Build C/C++ SDK
     runs-on: ${{ matrix.os }}
@@ -135,4 +143,4 @@ jobs:
   # publish:
   #   needs: [ check, test ]
   #   name: Publish on Cargo
-  #   if 
+  #   if
