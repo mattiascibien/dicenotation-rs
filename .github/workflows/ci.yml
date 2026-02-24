@@ -34,7 +34,7 @@ jobs:
     needs: [check]
     strategy:
       matrix:
-        rust_version: [stable, nightly, 1.49.0]
+        rust_version: [stable, nightly, 1.91.1]
         os: [ubuntu-latest, windows-latest, macos-latest]
     name: Test Suite
     runs-on: ${{ matrix.os }}
