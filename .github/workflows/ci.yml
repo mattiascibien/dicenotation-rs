@@ -55,8 +55,8 @@ jobs:
           command: test
 
       - name: Upload code coverage
-      - if: matrix.rust_version == 'stable' && matrix.os == 'ubuntu-latest'
-      - run: |
+        if: matrix.rust_version == 'stable' && matrix.os == 'ubuntu-latest'
+        run: |
           wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
           tar xzf master.tar.gz &&
           cd kcov-master &&
